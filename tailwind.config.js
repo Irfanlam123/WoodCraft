@@ -1,11 +1,15 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+// tailwind.config.js
+export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // For React
-    "./public/index.html",        // If you use index.html
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Roboto', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
-};
+}
