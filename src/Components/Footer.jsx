@@ -1,70 +1,96 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-[#4a0404] text-gray-300 py-10 mt-32">
-      <div className="container mx-auto px-6 md:flex md:justify-between md:items-start">
-        
-        {/* Left - Logo and Description */}
-        <div className="mb-8 md:mb-0 md:w-1/3">
-          <h2 className="text-2xl font-bold text-white mb-4">YourBrand</h2>
-          <p className="text-gray-400 max-w-sm">
-            Providing the best solutions for your business. Connect with us for a brighter future.
-          </p>
-        </div>
-        
-        {/* Center - Navigation Links */}
-        <div className="mb-8 md:mb-0 md:w-1/3 flex justify-around">
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-3">Home</h3>
-            <ul>
-              <li className="mb-2 hover:text-white cursor-pointer">Overview</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Features</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Pricing</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Testimonials</li>
+    <footer className="bg-[#4a0404] text-gray-300 pt-16 pb-8">
+      <div className="container mx-auto px-6">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+          
+          {/* Company Info */}
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold text-white mb-2">Woodcraft</h2>
+            <p className="text-gray-300 leading-relaxed">
+              Crafting exceptional woodwork with passion and precision. We transform wood into timeless pieces that elevate your spaces.
+            </p>
+            
+            <div className="flex space-x-4 pt-2">
+              <a href="#" className="bg-amber-700 hover:bg-amber-600 text-white p-3 rounded-full transition-all duration-300">
+                <FaFacebookF size={16} />
+              </a>
+              <a href="#" className="bg-amber-700 hover:bg-amber-600 text-white p-3 rounded-full transition-all duration-300">
+                <FaTwitter size={16} />
+              </a>
+              <a href="#" className="bg-amber-700 hover:bg-amber-600 text-white p-3 rounded-full transition-all duration-300">
+                <FaInstagram size={16} />
+              </a>
+              <a href="#" className="bg-amber-700 hover:bg-amber-600 text-white p-3 rounded-full transition-all duration-300">
+                <FaLinkedinIn size={16} />
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-white border-b border-amber-600 pb-2">Quick Links</h3>
+            <ul className="space-y-3">
+              <li><a href="/" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Home</a></li>
+              <li><a href="/About" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>About Us</a></li>
+              <li><a href="/Services" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Services</a></li>
+              <li><a href="/Gallery" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Gallery</a></li>
+              <li><a href="#" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Testimonials</a></li>
             </ul>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-3">About</h3>
-            <ul>
-              <li className="mb-2 hover:text-white cursor-pointer">Company</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Team</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Careers</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Blog</li>
+
+          {/* Services */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-white border-b border-amber-600 pb-2">Our Craftsmanship</h3>
+            <ul className="space-y-3">
+              <li><a href="#" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Custom Furniture</a></li>
+              <li><a href="#" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Wood Flooring</a></li>
+              <li><a href="#" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Cabinetry</a></li>
+              <li><a href="#" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Wood Carving</a></li>
+              <li><a href="#" className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"><span className="w-2 h-2 bg-amber-600 rounded-full"></span>Restoration</a></li>
             </ul>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-3">Contact</h3>
-            <ul>
-              <li className="mb-2 hover:text-white cursor-pointer">Help Center</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Support</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Privacy Policy</li>
-              <li className="mb-2 hover:text-white cursor-pointer">Terms of Service</li>
+
+          {/* Contact Info */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-white border-b border-amber-600 pb-2">Contact Us</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <FaMapMarkerAlt className="text-amber-600 mt-1 flex-shrink-0" />
+                <span>123 Woodcraft Lane, Studio 100<br />Portland, OR 97201</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaPhoneAlt className="text-amber-600" />
+                <a href="tel:+18005551234" className="hover:text-amber-400 transition-colors duration-200">(800) 555-5678</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaEnvelope className="text-amber-600" />
+                <a href="mailto:craft@woodcraft.com" className="hover:text-amber-400 transition-colors duration-200">craft@woodcraft.com</a>
+              </li>
             </ul>
           </div>
         </div>
 
-        {/* Right - Social Media */}
-        <div className="md:w-1/3 flex flex-col items-start md:items-end">
-          <h3 className="text-lg font-semibold text-white mb-3">Follow Us</h3>
-          <div className="flex space-x-5 text-gray-400">
-            <a href="#" className="hover:text-white" aria-label="Facebook">
-              <FaFacebookF size={20} />
-            </a>
-            <a href="#" className="hover:text-white" aria-label="Twitter">
-              <FaTwitter size={20} />
-            </a>
-            <a href="#" className="hover:text-white" aria-label="Instagram">
-              <FaInstagram size={20} />
-            </a>
-            <a href="#" className="hover:text-white" aria-label="LinkedIn">
-              <FaLinkedinIn size={20} />
-            </a>
-          </div>
-          <p className="mt-6 text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} YourBrand. All rights reserved.
+        {/* Divider */}
+        <div className="border-t border-gray-700 my-8"></div>
+
+        {/* Bottom Footer */}
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-400 text-sm mb-4 md:mb-0">
+            &copy; {currentYear} Woodcraft. All rights reserved.
           </p>
+          
+          <div className="flex space-x-6">
+            <a href="#" className="text-gray-400 hover:text-amber-400 text-sm transition-colors duration-200">Privacy Policy</a>
+            <a href="#" className="text-gray-400 hover:text-amber-400 text-sm transition-colors duration-200">Terms of Service</a>
+            <a href="#" className="text-gray-400 hover:text-amber-400 text-sm transition-colors duration-200">Sitemap</a>
+          </div>
         </div>
       </div>
     </footer>
