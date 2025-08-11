@@ -1,5 +1,6 @@
 import { FaAward, FaUsers, FaCheckCircle, FaClipboardCheck, FaHandshake } from 'react-icons/fa';
 import { GiWoodCabin, GiWoodenDoor, GiFloorPolisher } from 'react-icons/gi';
+import andriImg from "../../assets/andri.avif"; // Adjust based on your folder depth
 
 const AboutPage = () => {
   return (
@@ -44,7 +45,7 @@ const AboutPage = () => {
           </div>
           <div className="relative h-96 rounded-xl overflow-hidden shadow-xl">
             <img 
-              src="https://images.unsplash.com/photo-1605000797499-95e51b1b0f0a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" 
+              src=".\src\assets\Atwork.jpg" 
               alt="Carpenter at work"
               className="w-full h-full object-cover"
             />
@@ -94,9 +95,13 @@ const AboutPage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="bg-white rounded-lg overflow-hidden shadow-md">
-            <div className="h-64 bg-[url('https://images.unsplash.com/photo-1600881331209-5e19d7077e0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80')] bg-cover bg-center"></div>
+            {/* <div className="h-64 bg-[url('.\src\assets\andri.avif')] bg-cover bg-center"></div> */}
+             <div
+      className="h-64 bg-cover bg-center"
+      style={{ backgroundImage: `url(${andriImg})` }}
+    ></div>
             <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-1">Rajesh Kumar</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-1">Nancy Salem</h3>
               <p className="text-amber-600 font-medium mb-4">Master Carpenter & Founder</p>
               <p className="text-gray-600">
                 15 years experience specializing in custom furniture and antique restoration. 
