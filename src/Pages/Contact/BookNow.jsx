@@ -1,41 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from '../../Components/Footer';
+import Form from './Form';
 
 const BookNowPage = () => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    phone: '',
-    email: '',
-    service: '',
-    date: '',
-    time: '',
-    address: '',
-    notes: ''
-  });
+  const [loaded, setLoaded] = useState(false);
 
-  const services = [
-    'Custom Furniture Making',
-    'Wooden Flooring Installation',
-    'Repair & Restoration',
-    'Kitchen & Wardrobe Design',
-    'Doors & Windows Work',
-    'Office & Commercial Carpentry',
-    'Outdoor Woodwork'
-  ];
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your booking request! We will contact you shortly.');
-  };
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
   return (
     <div className="min-h-screen" style={{
@@ -44,211 +16,77 @@ const BookNowPage = () => {
       backgroundPosition: "center",
       backgroundAttachment: "fixed"
     }}>
-      {/* Overlay */}
-      <div className="min-h-screen bg-black/50 backdrop-blur-sm">
+      {/* Overlay with gradient */}
+      <div className={`min-h-screen bg-gradient-to-b from-black/70 via-black/50 to-black/70 backdrop-blur-sm transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+        
         {/* Hero Section */}
-        <div className="relative py-12 px-4 sm:py-16 md:py-20 bg-[#4a0404]/90 text-white">
-          <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Book Our Services</h1>
-            <p className="text-base sm:text-lg max-w-3xl mx-auto">
-              Fill out the form below to get a quote or book our carpentry services
+        <div className="relative py-16 px-4 sm:py-20 md:py-24 bg-gradient-to-r from-[#4a0404]/90 to-[#2a0101]/90 text-white">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] opacity-10"></div>
+          </div>
+          <div className="max-w-7xl mx-auto text-center relative">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 transform transition-all duration-700 hover:scale-105">
+              <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-600">
+                Book Our Master Craftsmen
+              </span>
+            </h1>
+            <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-6 text-amber-100">
+              Complete the form below and we'll craft your vision into reality
             </p>
+            <div className="flex justify-center space-x-4">
+              <div className="w-16 h-1 bg-amber-500 rounded-full"></div>
+              <div className="w-8 h-1 bg-amber-400 rounded-full"></div>
+              <div className="w-4 h-1 bg-amber-300 rounded-full"></div>
+            </div>
           </div>
         </div>
 
-        {/* Booking Form */}
-        <div className="max-w-4xl mx-auto py-8 sm:py-10 md:py-12 px-4 sm:px-5 md:px-6">
-          <div className="bg-white/90 backdrop-blur-sm rounded-lg sm:rounded-xl shadow-md sm:shadow-lg overflow-hidden border border-amber-700/20">
-            <div className="p-4 sm:p-6 md:p-8">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Service Request Form</h2>
-              
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
-                  {/* Full Name */}
-                  <div>
-                    <label htmlFor="fullName" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Full Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="fullName"
-                      name="fullName"
-                      required
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                    />
-                  </div>
+        {/* Decorative wood texture divider */}
+        <div className="h-2 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] bg-amber-900/80"></div>
 
-                  {/* Phone Number */}
-                  <div>
-                    <label htmlFor="phone" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Phone Number <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div>
-                    <label htmlFor="email" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                    />
-                  </div>
-
-                  {/* Service Selection */}
-                  <div>
-                    <label htmlFor="service" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Select Service <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="service"
-                      name="service"
-                      required
-                      value={formData.service}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                    >
-                      <option value="">-- Select a Service --</option>
-                      {services.map((service, index) => (
-                        <option key={index} value={service}>{service}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Date */}
-                  <div>
-                    <label htmlFor="date" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Preferred Date <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="date"
-                      id="date"
-                      name="date"
-                      required
-                      value={formData.date}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                    />
-                  </div>
-
-                  {/* Time */}
-                  <div>
-                    <label htmlFor="time" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Preferred Time <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="time"
-                      id="time"
-                      name="time"
-                      required
-                      value={formData.time}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                    />
-                  </div>
-
-                  {/* Full-width fields */}
-                  <div>
-                    <label htmlFor="address" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Address / Location <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      id="address"
-                      name="address"
-                      rows={3}
-                      required
-                      value={formData.address}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="notes" className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
-                      Additional Notes
-                    </label>
-                    <textarea
-                      id="notes"
-                      name="notes"
-                      rows={3}
-                      value={formData.notes}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm sm:text-base"
-                      placeholder="Any special requirements or details about your project..."
-                    />
-                  </div>
+        {/* Form Section */}
+        <div className="py-12 px-4 sm:px-6 lg:px-8 transform transition-all duration-500 hover:scale-[99.9%]">
+          <div className="max-w-5xl mx-auto">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-600 to-amber-900 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
+              <div className="relative bg-white/95 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden border border-amber-700/30">
+                <div className="p-6 sm:p-8 md:p-10">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 flex items-center">
+                    <svg className="w-8 h-8 mr-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    Service Request Form
+                  </h2>
+                  <p className="text-gray-600 mb-6">Let us know about your project needs</p>
+                  <Form />
                 </div>
-
-                <div className="mt-6 sm:mt-8">
-                  <button
-                    type="submit"
-                    className="w-full py-2.5 sm:py-3 px-4 sm:px-6 bg-amber-700 hover:bg-amber-800 text-white font-semibold rounded-md sm:rounded-lg shadow-sm sm:shadow-md transition duration-300 transform hover:scale-105 text-sm sm:text-base"
-                  >
-                    Submit Booking Request
-                  </button>
-                </div>
-              </form>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Additional Info */}
-          <div className="mt-8 sm:mt-10 md:mt-12 bg-[#4a0404]/90 backdrop-blur-sm text-white rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-8 border border-amber-700/20">
-            <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">What Happens Next?</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-              <div className="flex items-start">
-                <div className="bg-amber-600 p-1.5 sm:p-2 rounded-full mr-3 sm:mr-4">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm sm:text-base mb-1">Confirmation</h4>
-                  <p className="text-xs sm:text-sm text-amber-100">We'll confirm your request within 24 hours</p>
-                </div>
+        {/* Testimonial/CTA Section */}
+        <div className="py-16 px-4 sm:px-6 bg-gradient-to-b from-amber-900/30 to-[#4a0404]/90 text-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <blockquote className="text-xl sm:text-2xl italic mb-8">
+              "The team transformed our kitchen with exceptional craftsmanship. Their attention to detail is unmatched."
+            </blockquote>
+            <div className="flex items-center justify-center space-x-4 mb-8">
+              <div className="w-12 h-12 rounded-full bg-amber-600 flex items-center justify-center">
+                <span className="text-xl font-bold">JS</span>
               </div>
-              <div className="flex items-start">
-                <div className="bg-amber-600 p-1.5 sm:p-2 rounded-full mr-3 sm:mr-4">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm sm:text-base mb-1">Scheduling</h4>
-                  <p className="text-xs sm:text-sm text-amber-100">We'll arrange a convenient time for your project</p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <div className="bg-amber-600 p-1.5 sm:p-2 rounded-full mr-3 sm:mr-4">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm sm:text-base mb-1">Quality Work</h4>
-                  <p className="text-xs sm:text-sm text-amber-100">Our craftsmen will deliver exceptional results</p>
-                </div>
+              <div className="text-left">
+                <p className="font-semibold">James & Sarah</p>
+                <p className="text-sm text-amber-200">Custom Kitchen Project</p>
               </div>
             </div>
+            <button className="px-8 py-3 bg-amber-700 hover:bg-amber-600 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+              Call Us Directly: (123) 456-7890
+            </button>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
