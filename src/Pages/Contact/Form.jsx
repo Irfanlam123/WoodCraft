@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { createBooking } from "../../Services/bookingService";
-
+import { createBooking } from "../../Server/bookingService";
 const Form = () => {
   const [formData, setFormData] = useState({
     name: "",

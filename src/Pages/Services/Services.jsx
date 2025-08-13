@@ -1,292 +1,293 @@
-import { useState } from "react";
-import { FaHome, FaChair, FaTools } from "react-icons/fa";
-import { FaKitchenSet, FaDoorOpen, FaBuilding, FaTree } from "react-icons/fa6";
+import { useState, useEffect } from "react";
 import Button from "../../Components/Button";
 import Footer from "../../Components/Footer";
+import { getAllServices } from "../../Server/servicesApi";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiLoader, FiAlertCircle, FiCheckCircle, FiDollarSign, FiHome, FiBriefcase, FiSearch } from "react-icons/fi";
 import ServicesShowcase from "./Work";
 
 const ServicesPage = () => {
   const [activeTab, setActiveTab] = useState("all");
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const services = [
-    {
-      id: 1,
-      title: "Custom Furniture Making",
-      description: "Handcrafted tables, chairs, wardrobes, and cabinets tailored to your specifications. We use premium quality wood and traditional joinery techniques.",
-      icon: <FaChair className="text-4xl text-amber-600" />,
-      category: "residential",
-      priceRange: {
-        basic: "$800 - $2,500",
-        standard: "$2,500 - $5,000",
-        premium: "$5,000+"
-      },
-      features: [
-        "Custom designs to your exact specifications",
-        "Premium hardwoods (oak, walnut, mahogany)",
-        "Traditional joinery techniques",
-        "3D design consultation included"
-      ]
-    },
-    {
-      id: 2,
-      title: "Wooden Flooring Installation",
-      description: "Expert installation of laminate, hardwood, and vinyl plank flooring. We provide seamless fitting with attention to detail for a perfect finish.",
-      icon: <FaHome className="text-4xl text-amber-600" />,
-      category: "residential",
-      priceRange: {
-        basic: "$3 - $6/sq.ft (laminate)",
-        standard: "$6 - $12/sq.ft (engineered)",
-        premium: "$12+/sq.ft (solid hardwood)"
-      },
-      features: [
-        "Precision cutting and installation",
-        "Moisture barrier included",
-        "Multiple wood species available",
-        "10-year craftsmanship warranty"
-      ]
-    },
-    {
-      id: 3,
-      title: "Repair & Restoration",
-      description: "Breathing new life into old furniture through expert repair and polishing. We preserve the character while restoring functionality.",
-      icon: <FaTools className="text-4xl text-amber-600" />,
-      category: "both",
-      priceRange: {
-        basic: "$150 - $300 (minor repairs)",
-        standard: "$300 - $800 (structural repairs)",
-        premium: "$800+ (antique restoration)"
-      },
-      features: [
-        "Free damage assessment",
-        "Historical preservation techniques",
-        "Color matching for flawless repairs",
-        "Upholstery services available"
-      ]
-    },
-    {
-      id: 4,
-      title: "Kitchen & Wardrobe Design",
-      description: "Custom modular kitchen and wardrobe solutions that maximize space and functionality while maintaining aesthetic appeal.",
-      icon: <FaKitchenSet className="text-4xl text-amber-600" />,
-      category: "residential",
-      priceRange: {
-        basic: "$4,000 - $8,000",
-        standard: "$8,000 - $15,000",
-        premium: "$15,000+"
-      },
-      features: [
-        "Custom storage solutions",
-        "Soft-close hardware standard",
-        "Multiple finish options",
-        "Integrated lighting available"
-      ]
-    },
-    {
-      id: 5,
-      title: "Doors & Windows Work",
-      description: "Custom wooden doors, frames, and window fittings crafted with precision for perfect fit and smooth operation.",
-      icon: <FaDoorOpen className="text-4xl text-amber-600" />,
-      category: "both",
-      priceRange: {
-        basic: "$300 - $600 (standard doors)",
-        standard: "$600 - $1,200 (custom designs)",
-        premium: "$1,200+ (specialty/antique)"
-      },
-      features: [
-        "Precision measurements",
-        "Weatherproofing included",
-        "Custom hardware options",
-        "Soundproofing available"
-      ]
-    },
-    {
-      id: 6,
-      title: "Office & Commercial Carpentry",
-      description: "Professional office desks, counters, and shelving solutions designed for productivity and durability in commercial spaces.",
-      icon: <FaBuilding className="text-4xl text-amber-600" />,
-      category: "commercial",
-      priceRange: {
-        basic: "$1,500 - $3,000",
-        standard: "$3,000 - $7,000",
-        premium: "$7,000+"
-      },
-      features: [
-        "Commercial-grade materials",
-        "Space optimization designs",
-        "Quick turnaround available",
-        "Bulk discounts for multiple units"
-      ]
-    },
-    {
-      id: 7,
-      title: "Outdoor Woodwork",
-      description: "Beautiful decks, pergolas, and garden furniture built to withstand the elements while enhancing your outdoor living space.",
-      icon: <FaTree className="text-4xl text-amber-600" />,
-      category: "both",
-      priceRange: {
-        basic: "$1,500 - $3,500",
-        standard: "$3,500 - $8,000",
-        premium: "$8,000+"
-      },
-      features: [
-        "Weather-resistant woods",
-        "Custom staining options",
-        "Structural engineering included",
-        "5-year outdoor warranty"
-      ]
-    }
+  // Color definitions
+  const colors = {
+    primary: '#4a0404',       // Deep burgundy
+    secondary: '#d97706',     // Amber-600
+    lightBg: '#fffbeb',       // Amber-50
+    accent: '#b45309',        // Amber-700
+    textDark: '#1f2937',      // Gray-800
+    textLight: '#f3f4f6',     // Gray-100
+    residential: '#3b82f6',   // Blue-500
+    commercial: '#10b981',    // Green-500
+    both: '#8b5cf6'           // Purple-500
+  };
+
+  // Fetch services from backend
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllServices();
+        setServices(data);
+        setError(null);
+      } catch (err) {
+        setError(err.message || "Error fetching services");
+        setServices([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchServices();
+  }, []);
+
+  // Filter services by category and search term
+  const filteredServices = services
+    .filter(service => 
+      activeTab === "all" || 
+      service.category === activeTab || 
+      service.category === "both"
+    )
+    .filter(service =>
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+  const tabConfig = [
+    { id: "all", label: "All Services", icon: <FiCheckCircle className="mr-2" /> },
+    { id: "residential", label: "Residential", icon: <FiHome className="mr-2" /> },
+    { id: "commercial", label: "Commercial", icon: <FiBriefcase className="mr-2" /> }
   ];
 
-  const filteredServices = activeTab === "all" 
-    ? services 
-    : services.filter(service => service.category === activeTab || service.category === "both");
+  if (loading) {
+    return (
+      <div className="min-h-screen" style={{ background: colors.lightBg }}>
+        <div className="flex flex-col items-center justify-center h-full">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          >
+            <FiLoader className="text-4xl mb-4" style={{ color: colors.primary }} />
+          </motion.div>
+          <p className="font-medium" style={{ color: colors.primary }}>Loading our services...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen" style={{ background: colors.lightBg }}>
+        <div className="flex flex-col items-center justify-center h-full px-4">
+          <FiAlertCircle className="text-4xl mb-4" style={{ color: colors.primary }} />
+          <h2 className="text-2xl font-bold mb-2" style={{ color: colors.primary }}>Oops!</h2>
+          <p className="text-center max-w-md mb-6" style={{ color: colors.primary }}>
+            We couldn't load our services. {error}
+          </p>
+          <Button 
+            text="Try Again" 
+            onClick={() => window.location.reload()} 
+            style={{ backgroundColor: colors.primary }}
+            className="hover:bg-opacity-90 text-white"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-yellow-50">
+    <div className="min-h-screen" style={{ background: colors.lightBg }}>
       {/* Hero Section */}
       <div 
-        className="relative py-28 px-4 sm:px-6 lg:px-8 overflow-hidden"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1598300053659-fb0f77d5f5c1?auto=format&fit=crop&w=1920&q=80')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          backgroundRepeat: "no-repeat"
-        }}
+        className="py-20 px-6 text-center relative overflow-hidden"
+        style={{ backgroundColor: colors.primary }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 to-gray-900/60"></div>
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] opacity-10"></div>
-
-        <div className="relative max-w-7xl mx-auto text-center z-10">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight tracking-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 to-amber-100">
-              Our Carpentry Services
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-100 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Master craftsmanship meets modern design. Quality woodwork solutions for homes and businesses.
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Our Premium Services</h1>
+          <p className="text-xl max-w-2xl mx-auto" style={{ color: colors.textLight }}>
+            Exceptional solutions tailored to your residential or commercial needs
           </p>
-          <div className="flex flex-wrap justify-center gap-4 mt-8">
-            <button className="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-              Get Free Estimate
-            </button>
-            <button className="px-8 py-3 bg-transparent border-2 border-amber-400 text-amber-100 hover:bg-amber-900/30 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
-              View Our Work
-            </button>
-          </div>
-        </div>
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-          <svg className="w-8 h-8 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-          </svg>
-        </div>
+        </motion.div>
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-16"
+          style={{ 
+            background: `linear-gradient(to top, ${colors.lightBg}, transparent)`
+          }}
+        ></div>
       </div>
 
-      {/* Services Content */}
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap justify-center mb-12 gap-2">
-          <button
-            onClick={() => setActiveTab("all")}
-            className={`px-6 py-2 rounded-full font-medium transition-all ${activeTab === "all" ? 'bg-amber-600 text-white' : 'bg-white text-gray-800 hover:bg-amber-100'}`}
-          >
-            All Services
-          </button>
-          <button
-            onClick={() => setActiveTab("residential")}
-            className={`px-6 py-2 rounded-full font-medium transition-all ${activeTab === "residential" ? 'bg-amber-600 text-white' : 'bg-white text-gray-800 hover:bg-amber-100'}`}
-          >
-            Residential
-          </button>
-          <button
-            onClick={() => setActiveTab("commercial")}
-            className={`px-6 py-2 rounded-full font-medium transition-all ${activeTab === "commercial" ? 'bg-amber-600 text-white' : 'bg-white text-gray-800 hover:bg-amber-100'}`}
-          >
-            Commercial
-          </button>
-        </div>
+      {/* Filter Section */}
+      <div className="container mx-auto px-6 py-12 -mt-10">
+        <motion.div 
+          className="bg-white rounded-xl shadow-xl p-6 mb-8 border"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          style={{ borderColor: colors.primary + '20' }}
+        >
+          {/* Search Input */}
+          <div className="mb-6 max-w-md mx-auto">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FiSearch className="h-5 w-5" style={{ color: colors.primary }} />
+              </div>
+              <input
+                type="text"
+                placeholder="Search services..."
+                className="w-full pl-10 pr-4 py-3 rounded-full border focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all"
+                style={{
+                  borderColor: colors.primary + '40',
+                  focusRingColor: colors.primary,
+                  backgroundColor: colors.lightBg
+                }}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex flex-wrap justify-center gap-3">
+            {tabConfig.map((tab) => (
+              <motion.button
+                key={tab.id}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center px-6 py-3 rounded-full font-medium transition-all ${
+                  activeTab === tab.id ? 'shadow-md' : ''
+                }`}
+                style={{
+                  backgroundColor: activeTab === tab.id ? colors.primary : colors.lightBg,
+                  color: activeTab === tab.id ? 'white' : colors.textDark
+                }}
+              >
+                {tab.icon}
+                {tab.label}
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Results Count */}
+        <motion.div 
+          className="mb-8 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <p className="font-medium" style={{ color: colors.primary }}>
+            Showing {filteredServices.length} {filteredServices.length === 1 ? "service" : "services"}
+            {activeTab !== "all" && ` in ${activeTab}`}
+            {searchTerm && ` matching "${searchTerm}"`}
+          </p>
+        </motion.div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredServices.map((service) => (
+        {filteredServices.length === 0 ? (
+          <motion.div 
+            className="text-center py-16"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
             <div 
-              key={service.id} 
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+              className="inline-block p-6 rounded-full mb-4"
+              style={{ backgroundColor: colors.primary + '10' }}
             >
-              <div className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="mr-4">
-                    {service.icon}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800">{service.title}</h3>
-                </div>
-                <p className="text-gray-600 mb-4">{service.description}</p>
-                
-                {/* Pricing Section */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-gray-700 mb-2">Price Range:</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Basic:</span>
-                      <span className="font-medium">{service.priceRange.basic}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Standard:</span>
-                      <span className="font-medium">{service.priceRange.standard}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Premium:</span>
-                      <span className="font-medium">{service.priceRange.premium}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Features List */}
-                <ul className="mb-6 space-y-2 text-sm text-gray-600">
-                  {service.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <svg className="h-4 w-4 text-amber-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                <div className="flex justify-between items-center">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    service.category === 'residential' ? 'bg-blue-100 text-blue-800' :
-                    service.category === 'commercial' ? 'bg-green-100 text-green-800' :
-                    'bg-purple-100 text-purple-800'
-                  }`}>
-                    {service.category === 'residential' ? 'Home' : 
-                     service.category === 'commercial' ? 'Business' : 'Both'}
-                  </span>
-                  <Button text='Get Exact Quote'/>
-                </div>
-              </div>
+              <FiAlertCircle className="text-4xl" style={{ color: colors.primary }} />
             </div>
-          ))}
-        </div>
-
-        {/* Services Showcase */}
-        <ServicesShowcase/>
-
-        {/* CTA Section */}
-        <div className="mt-16 bg-gradient-to-r from-[#4a0404] to-[#6a0c0c] rounded-xl p-8 text-center text-white shadow-xl">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Project?</h2>
-          <p className="text-xl mb-6 max-w-2xl mx-auto">
-            Contact us today for a free consultation and exact pricing for your specific needs.
-          </p>
-          <button className="px-8 py-3 bg-white text-amber-700 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg hover:scale-105 transform duration-200">
-            Contact Us Now
-          </button>
-        </div>
+            <h3 className="text-2xl font-bold mb-2" style={{ color: colors.primary }}>
+              No services found
+            </h3>
+            <p className="max-w-md mx-auto" style={{ color: colors.primary }}>
+              {searchTerm
+                ? "Try a different search term or category"
+                : "We couldn't find any services matching your criteria"}
+            </p>
+          </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <AnimatePresence>
+              {filteredServices.map((service) => (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all"
+                  style={{ borderTop: `4px solid ${colors.primary}` }}
+                >
+                  {service.image_url && (
+                    <div className="h-48 overflow-hidden relative">
+                      <img
+                        src={service.image_url}
+                        alt={service.name}
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                      />
+                      <div 
+                        className="absolute bottom-0 left-0 right-0 h-1/3"
+                        style={{ 
+                          background: `linear-gradient(to top, rgba(74,4,4,0.7), transparent)`
+                        }}
+                      ></div>
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 
+                        className="text-xl font-bold"
+                        style={{ color: colors.primary }}
+                      >
+                        {service.name}
+                      </h3>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          service.category === "residential"
+                            ? "bg-blue-100 text-blue-800"
+                            : service.category === "commercial"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-purple-100 text-purple-800"
+                        }`}
+                      >
+                        {service.category}
+                      </span>
+                    </div>
+                    <p 
+                      className="mt-2 line-clamp-3"
+                      style={{ color: colors.textDark }}
+                    >
+                      {service.description}
+                    </p>
+                    <div className="mt-4 flex items-center" style={{ color: colors.primary }}>
+                      <FiDollarSign className="mr-1" />
+                      <span className="font-medium">{service.price_range}</span>
+                    </div>
+                    <div className="mt-6">
+                      <Button
+                        text="Get Exact Quote"
+                        style={{ backgroundColor: colors.primary }}
+                        className="w-full hover:bg-opacity-90 text-white"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
-      
-      <Footer/>
+        <ServicesShowcase/>
+      <Footer />
     </div>
   );
 };
