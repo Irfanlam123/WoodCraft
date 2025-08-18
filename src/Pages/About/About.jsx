@@ -1,6 +1,7 @@
 import { FaAward, FaUsers, FaCheckCircle, FaClipboardCheck, FaHandshake } from 'react-icons/fa';
 import { GiWoodCabin, GiWoodenDoor, GiFloorPolisher } from 'react-icons/gi';
 import andriImg from "../../assets/andri.avif"; // Adjust based on your folder depth
+import Footer from '../../Components/Footer';
 
 const AboutPage = () => {
   return (
@@ -309,6 +310,7 @@ const AboutPage = () => {
           </button>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

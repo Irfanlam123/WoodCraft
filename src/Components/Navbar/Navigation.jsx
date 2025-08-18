@@ -10,8 +10,11 @@ const Navigation = () => {
   const navBar = [
     { id: 1, name: "Home", link: "/" },
     { id: 2, name: "About", link: "/About" },
-    { id: 3, name: "Services", link: "/Services" },
-    { id: 4, name: "Book Now", link: "/BookNow" },
+
+        { id: 3, name: "Gallery", link: "/Gallery" },
+
+    { id: 4, name: "Services", link: "/Services" },
+    { id: 5, name: "Book Now", link: "/BookNow" },
   ];
 
   useEffect(() => {
